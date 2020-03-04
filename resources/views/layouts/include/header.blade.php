@@ -45,13 +45,17 @@
                     </div>
                 </div>
                 <div class="ht-right">
+                @if(Auth::check())
+                    <a href="{{route('login')}}" class="login-panel"><i class="fa fa-user"></i>Profile</a>
+                @else
                     <a href="{{route('login')}}" class="login-panel"><i class="fa fa-user"></i>Login</a>
+                @endif
                     <div class="lan-selector">
                         <select class="language_drop" name="countries" id="countries" style="width:300px;">
                             <option value='yt' data-image="{{asset('app-assets/img/flag-1.jpg')}}" data-imagecss="flag yt"
                                 data-title="English">English</option>
                             <option value='yu' data-image="{{asset('app-assets/img/flag-2.jpg')}}" data-imagecss="flag yu"
-                                data-title="Bangladesh">German </option>
+                                data-title="Vietnamese">Vietnamese </option>
                         </select>
                     </div>
                     <div class="top-social">
