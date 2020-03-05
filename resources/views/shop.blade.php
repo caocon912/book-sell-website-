@@ -145,25 +145,24 @@
                             <div class="col-lg-4 col-sm-6">
                                 <div class="product-item">
                                     <div class="pi-pic">
-                                        <img src="{{asset('app-assets/img/products/product-1.jpg')}}" alt="">
+                                        <img src="{{asset('app-assets/img/products/women-2.jpg')}}" alt="product_img">
                                         <div class="sale pp-sale">Sale</div>
                                         <div class="icon">
                                             <i class="icon_heart_alt"></i>
                                         </div>
                                         <ul>
-                                            <li class="w-icon active"><a href="#"><i class="icon_bag_alt"></i></a></li>
-                                            <li class="quick-view"><a href="#">+ Quick View</a></li>
-                                            <li class="w-icon"><a href="#"><i class="fa fa-random"></i></a></li>
+                                            <li class="w-icon active"><button class="add-to-cart"><a href="{{route('add-to-cart',['product_id'=>$product->ID])}}"><i class="icon_bag_alt"></i></a></button></li>
+                                            <li class="quick-view"><a href="">+ Quick View</a></li>
+                                            <!-- <li class="w-icon"><a href=""><i class="fa fa-random"></i></a></li> -->
                                         </ul>
                                     </div>
                                     <div class="pi-text">
                                         <div class="catagory-name">{{$product->CATEGORY_NAME}}</div>
                                         <a href="#">
-                                            <h5>{{$product->NAME}}</h5>
+                                            <h5 id="product-name">{{$product->NAME}}</h5>
                                         </a>
                                         <div class="product-price">
-                                        {{$product->NEW_PRICE}}
-                                            <!-- <span>{{$product->NEW_PRICE}}</span> -->
+                                            {{$product->NEW_PRICE}}
                                         </div>
                                     </div>
                                 </div>

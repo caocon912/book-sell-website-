@@ -56,7 +56,7 @@ class LoginController extends Controller
     public function authenticate(Request $req){
         $credential = $req->only('username','pwd');
         if (Auth::attempt(['username'=>$req->input('username'),'password'=>$req->input('pwd')])){
-            redirect()->intend('shop');
+            return redirect('shop');
         } else {
             redirect()->back();
         }

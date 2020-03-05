@@ -91,13 +91,13 @@
                             <li class="heart-icon">
                                 <a href="#">
                                     <i class="icon_heart_alt"></i>
-                                    <span>1</span>
+                                    <span>0</span>
                                 </a>
                             </li>
                             <li class="cart-icon">
                                 <a href="#">
                                     <i class="icon_bag_alt"></i>
-                                    <span>3</span>
+                                    <span>0</span>
                                 </a>
                                 <div class="cart-hover">
                                     <div class="select-items">
@@ -123,7 +123,7 @@
                                         <h5>$120.00</h5>
                                     </div>
                                     <div class="select-button">
-                                        <a href="#" class="primary-btn view-card">VIEW CARD</a>
+                                        <a href="{{route('view-cart-detail')}}" class="primary-btn view-card">VIEW CARD</a>
                                         <a href="#" class="primary-btn checkout-btn">CHECK OUT</a>
                                     </div>
                                 </div>
@@ -136,7 +136,7 @@
         </div>
         <div class="nav-item">
             <div class="container">
-                <div class="nav-depart">
+                <!-- <div class="nav-depart">
                     <div class="depart-btn">
                         <i class="ti-menu"></i>
                         <span>All departments</span>
@@ -151,10 +151,10 @@
                             <li><a href="#">Brand Outdoor Apparel</a></li>
                         </ul>
                     </div>
-                </div>
+                </div> -->
                 <nav class="nav-menu mobile-menu">
                     <ul>
-                        <li class="active"><a href="{{route('home')}}">Home</a></li>
+                        <li><a href="{{route('home')}}">Home</a></li>
                         <li><a href="{{route('shop')}}">Shop</a></li>
                         <li><a href="#">Collection</a>
                             <ul class="dropdown">
@@ -168,9 +168,8 @@
                         <li><a href="#">Pages</a>
                             <ul class="dropdown">
                                 <li><a href="{{route('blog-detail')}}">Blog Details</a></li>
-                                <li><a href="{{route('shopping-cart')}}">Shopping Cart</a></li>
+                                <li><a href="{{route('view-cart-detail')}}">Shopping Cart</a></li>
                                 <li><a href="{{route('checkout')}}">Checkout</a></li>
-                                <!-- <li><a href="./faq.html">Faq</a></li> -->
                                 <li><a href="{{route('register')}}">Register</a></li>
                                 <li><a href="{{route('login')}}">Login</a></li>
                             </ul>

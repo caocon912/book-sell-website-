@@ -22,7 +22,7 @@ Auth::routes([
     'verify' => false,
 ]);
 //start project
-Route::view('/home','home')->name('home');
+Route::get('/home','HomeController@getData')->name('home');
 //log-in
 Route::view('/login','login')->name('login');
 Route::post('/login-submit','Auth\LoginController@authenticate')->name('login-submit');
@@ -37,7 +37,9 @@ Route::view('/contact','contact')->name('contact');
 //blog-detail
 Route::view('/blog-detail','blog-detail')->name('blog-detail');
 //shopping-cart
-Route::view('/shopping-cart','cart')->name('shopping-cart');
+Route::get('/view-cart-detail','CartController@getAllItemInCart')->name('view-cart-detail');
+Route::get('/add-to-cart/{product_id}','CartController@addToCart')->name('add-to-cart');
+Route::get('/delete-item-cart/{product_id}','CartController@deleteItem')->name('delete-item-cart');
 //checkout
 Route::view('/checkout','checkout')->name('checkout');
 //shop

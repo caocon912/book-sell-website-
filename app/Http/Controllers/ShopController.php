@@ -10,7 +10,6 @@ class ShopController extends Controller
 {
     //get all the product 
     protected function getAllProduct(){
-        //$products = DB::table('product')->get();
         $products = DB::table('product')
                         ->join('category','category.ID','=','product.CATEGORY_ID')
                         ->select('product.*','category.NAME as CATEGORY_NAME')

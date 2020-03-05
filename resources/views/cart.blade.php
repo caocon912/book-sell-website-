@@ -17,7 +17,7 @@
     <!-- Breadcrumb Section Begin -->
 
     <!-- Shopping Cart Section Begin -->
-    <section class="shopping-cart spad">
+    <section class=" spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -34,7 +34,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <!-- <tr>
                                     <td class="cart-pic first-row"><img src="img/cart-page/product-1.jpg" alt=""></td>
                                     <td class="cart-title first-row">
                                         <h5>Pure Pineapple</h5>
@@ -49,39 +49,25 @@
                                     </td>
                                     <td class="total-price first-row">$60.00</td>
                                     <td class="close-td first-row"><i class="ti-close"></i></td>
-                                </tr>
+                                </tr> -->
+                                @foreach($items as $item)
                                 <tr>
-                                    <td class="cart-pic"><img src="img/cart-page/product-2.jpg" alt=""></td>
+                                    <td class="cart-pic"><img src="{{$item->image_item}}" alt=""></td>
                                     <td class="cart-title">
-                                        <h5>American lobster</h5>
+                                        <h5>{{$item->name_item}}</h5>
                                     </td>
-                                    <td class="p-price">$60.00</td>
+                                    <td class="p-price">{{$item->price_item}}</td>
                                     <td class="qua-col">
                                         <div class="quantity">
                                             <div class="pro-qty">
-                                                <input type="text" value="1">
+                                                <input type="text" value="{{$item->quanlity}}">
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="total-price">$60.00</td>
-                                    <td class="close-td"><i class="ti-close"></i></td>
+                                    <td class="total-price">{{$item->quanlity * $item->price_item}}</td>
+                                    <td class="close-td"><a href="{{route('delete-item-cart',['product_id'=>$item->id_item])}}"><i class="ti-close"></i></a></td>
                                 </tr>
-                                <tr>
-                                    <td class="cart-pic"><img src="img/cart-page/product-3.jpg" alt=""></td>
-                                    <td class="cart-title">
-                                        <h5>Guangzhou sweater</h5>
-                                    </td>
-                                    <td class="p-price">$60.00</td>
-                                    <td class="qua-col">
-                                        <div class="quantity">
-                                            <div class="pro-qty">
-                                                <input type="text" value="1">
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="total-price">$60.00</td>
-                                    <td class="close-td"><i class="ti-close"></i></td>
-                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
