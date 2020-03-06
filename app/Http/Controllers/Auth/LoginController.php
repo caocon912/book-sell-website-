@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 class LoginController extends Controller
 {
@@ -56,10 +57,25 @@ class LoginController extends Controller
     public function authenticate(Request $req){
         $credential = $req->only('username','pwd');
         if (Auth::attempt(['username'=>$req->input('username'),'password'=>$req->input('pwd')])){
-            return redirect('shop');
+            return redirect()->intended('shop');
         } else {
-            redirect()->back();
+            echo "<script>
+                    var tmp = window.confirm('Username or password is not incorrect');
+                    if (tmp==true){
+                        window.history.back();
+                    }
+                </script>";
         }
-
     }
+
+    public function logout(){
+        Auth::logout();
+        if (Auth::check()==false){
+            echo "<script>
+                    window.alert('You logout successfully!');
+                </script>";
+            return redirect('home');
+        }
+    }
+    
 }

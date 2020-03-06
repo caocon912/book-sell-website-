@@ -32,4 +32,8 @@ class ResetPasswordController extends Controller
     protected function guard(){
         return Auth::guard('guard-name');
     }
+
+    protected function resetPassword(){
+        return view('auth.passwords.reset');
+    }
 }

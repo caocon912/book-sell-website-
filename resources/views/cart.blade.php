@@ -21,7 +21,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="cart-table">
+                    <div class="cart-table" id="cart-table">
                         <table>
                             <thead>
                                 <tr>
@@ -51,6 +51,7 @@
                                     <td class="close-td first-row"><i class="ti-close"></i></td>
                                 </tr> -->
                                 @foreach($items as $item)
+                                <input type="hidden" value = "{{$item->id_item}}" name="id_item">
                                 <tr>
                                     <td class="cart-pic"><img src="{{$item->image_item}}" alt=""></td>
                                     <td class="cart-title">
@@ -60,7 +61,7 @@
                                     <td class="qua-col">
                                         <div class="quantity">
                                             <div class="pro-qty">
-                                                <input type="text" value="{{$item->quanlity}}">
+                                                <input type="text" value="{{$item->quanlity}}" name="quanlity">
                                             </div>
                                         </div>
                                     </td>
@@ -75,8 +76,9 @@
                         <div class="col-lg-4">
                             <div class="cart-buttons">
                                 <a href="#" class="primary-btn continue-shop">Continue shopping</a>
-                                <a href="#" class="primary-btn up-cart">Update cart</a>
+                                <button class="primary-btn up-cart" onclick="getAllItemId();">Update cart</button>
                             </div>
+                    
                             <div class="discount-coupon">
                                 <h6>Discount Codes</h6>
                                 <form action="#" class="coupon-form">

@@ -17,15 +17,16 @@ Route::get('/', function () {
 /*======================================FRONT ROUTE============================================================*/
 Auth::routes([
     'register'=> false,
-    'login'=> false,
     'reset' => false, 
-    'verify' => false,
+    'verify' => true,
 ]);
 //start project
 Route::get('/home','HomeController@getData')->name('home');
 //log-in
 Route::view('/login','login')->name('login');
 Route::post('/login-submit','Auth\LoginController@authenticate')->name('login-submit');
+Route::get('/logout','Auth\LoginController@logout')->name('logout');
+Route::get('/reset-password','Auth\ResetPasswordController@resetPassword')->name('reset-password');
 //log-up
 Route::view('/register','register')->name('register');
 Route::post('/register-submit','Auth\RegisterController@create')->name('register-submit');
@@ -33,13 +34,14 @@ Route::post('/register-submit','Auth\RegisterController@create')->name('register
 //blog
 Route::view('/blog','blog')->name('blog');
 //contact
-Route::view('/contact','contact')->name('contact');
+Route::view('/contact','contact')->name('contact')->middleware('auth');
 //blog-detail
 Route::view('/blog-detail','blog-detail')->name('blog-detail');
 //shopping-cart
 Route::get('/view-cart-detail','CartController@getAllItemInCart')->name('view-cart-detail');
 Route::get('/add-to-cart/{product_id}','CartController@addToCart')->name('add-to-cart');
 Route::get('/delete-item-cart/{product_id}','CartController@deleteItem')->name('delete-item-cart');
+Route::get('/update-cart','CartController@updateCart')->name('update-cart');
 //checkout
 Route::view('/checkout','checkout')->name('checkout');
 //shop

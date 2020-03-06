@@ -47,6 +47,7 @@
                 <div class="ht-right">
                 @if(Auth::check())
                     <a href="{{route('login')}}" class="login-panel"><i class="fa fa-user"></i>Profile</a>
+                    <a href="{{route('logout')}}" class="login-panel"><i class="fa fa-user"></i>Logout</a>
                 @else
                     <a href="{{route('login')}}" class="login-panel"><i class="fa fa-user"></i>Login</a>
                 @endif

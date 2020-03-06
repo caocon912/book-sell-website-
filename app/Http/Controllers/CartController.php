@@ -61,7 +61,13 @@ class CartController extends Controller
             
             if ($is_cart_exist->count()==0){
                 $ID_cart = CommonController::getNextId('cart');
-                DB::table('cart')->insert(['ID'=>$ID_cart,'ID_USER'=>$username,'TIMEOUT'=>'900','TIME_CREATE'=>$DATE]);
+                DB::table('cart')
+                    ->insert([
+                        'ID'=>$ID_cart,
+                        'ID_USER'=>$username,
+                        'TIMEOUT'=>'900',
+                        'TIME_CREATE'=>$DATE
+                    ]);
                 DB::table('cart_items')
                     ->insert([
                         'ID_CART'=>$ID_cart,
@@ -108,7 +114,6 @@ class CartController extends Controller
     
     //delete cart after timeout:900
     public function deleteCartAfterTimeOut(){
-
         $data = DB::table('cart')->get();
         foreach($data as $item){
             $time_create = $item->TIME_CREATE;
@@ -121,5 +126,23 @@ class CartController extends Controller
             }
             
         }        
+    }
+
+    public function updateCart(Request $req){
+        //with user logined
+        $ID_cart = DB::table('cart')
+                        ->select('ID')
+                        ->where('ID_USER','=',Auth::user()->USERNAME)
+                        ->first();
+
+        $ID_items = $req->input('id_item');
+        $quanlity = $req->input('quanlity');
+        var_dump($ID_items);exit;
+        for ($i = 0; $i < count($ID_items); ++$i){
+            $cart_items = DB::table()->where([['ID_CART','=',$ID_cart],['ID_PRODUCT','=',$quanlity]])->update([
+                'QUANLITY'=>$quanlity[$i]
+            ]);
+        }
+        return redirect('view-cart-detail');
     }
 }
