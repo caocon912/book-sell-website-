@@ -29,7 +29,7 @@ class CartController extends Controller
             //get all items from cart_item has ID_CART = $cart_id
             $cart_items = DB::table('cart_items')
                             ->join('product','product.ID','=','cart_items.ID_PRODUCT')
-                            ->select('product.ID as id_item','product.NAME as name_item','product.IMAGE as image_item','product.NEW_PRICE as price_item','cart_items.QUANLITY as quanlity')
+                            ->select('product.ID as ID','product.NAME as NAME','product.IMAGE as IMAGE','product.NEW_PRICE as NEW_PRICE','cart_items.QUANLITY as QUANLITY')
                             ->where('ID_CART','=',$cart_id->ID)
                             ->get();
 
@@ -38,7 +38,6 @@ class CartController extends Controller
         else {
             if ($req->session()->exists('shopping-cart')){
                 $cart_items = $req->session()->get('shopping-cart');
-                var_dump($cart_items);exit; 
             }
         }
         if ($cart_items==null){
@@ -99,9 +98,26 @@ class CartController extends Controller
                 }
             }
         } else { //save to session
-            $item = DB::table('product')->where('ID','=',$product_id)->first();
-            $req->session()->push('shopping-cart',$item);
-            
+            $item_add = DB::table('product')->where('ID','=',$product_id)->first();
+            $cart_info = $req->session()->get('shopping-cart');
+            if ($cart_info != null){
+                //check this item exist in cart?
+                $is_item_exist = false;
+                foreach ($cart_info as $item){
+                    if ($item->ID == $product_id){
+                        $item_add->QUANLITY = $item->QUANLITY + 1; 
+                        $is_item_exist = true;
+                        break;
+                    }
+                } 
+                if ($is_item_exist==false){
+                    $item_add->QUANLITY = 1;
+                }
+            } else {
+                $item_add->QUANLITY = 1;
+            }
+            //$req->session()->pull('shopping-cart',$item);
+            $req->session()->push('shopping-cart',$item_add);
         }
         return redirect('view-cart-detail');
     }
