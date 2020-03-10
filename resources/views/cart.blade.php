@@ -61,7 +61,7 @@
                                     <td class="qua-col">
                                         <div class="quantity">
                                             <div class="pro-qty">
-                                                <input type="text" value="{{$item->QUANLITY}}" name="quanlity">
+                                                <input type="number" value="{{$item->QUANLITY}}" name="quanlity">
                                             </div>
                                         </div>
                                     </td>
@@ -76,7 +76,7 @@
                         <div class="col-lg-4">
                             <div class="cart-buttons">
                                 <a href="#" class="primary-btn continue-shop">Continue shopping</a>
-                                <button class="primary-btn up-cart" onclick="getAllItemId();">Update cart</button>
+                                <button class="primary-btn up-cart" onclick="getListItemId();">Update cart</button>
                             </div>
                     
                             <div class="discount-coupon">

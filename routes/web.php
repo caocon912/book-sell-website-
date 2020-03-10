@@ -41,7 +41,7 @@ Route::view('/blog-detail','blog-detail')->name('blog-detail');
 Route::get('/view-cart-detail','CartController@getAllItemInCart')->name('view-cart-detail');
 Route::get('/add-to-cart/{product_id}','CartController@addToCart')->name('add-to-cart');
 Route::get('/delete-item-cart/{product_id}','CartController@deleteItem')->name('delete-item-cart');
-Route::get('/update-cart','CartController@updateCart')->name('update-cart');
+Route::get('/update-cart/{listItemsId}/{listQuanlity}','CartController@updateCart')->name('update-cart');
 //checkout
 Route::view('/checkout','checkout')->name('checkout');
 //shop
