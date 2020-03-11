@@ -19,8 +19,10 @@ function getListItemId(){
             listItemsId.push(idItem);
         }
     }
-    var url = '{!! route("update-cart", ["listItemsId"=>":listItemsId","listQuanlity"=>":listQuanlity"]) !!}';
-    url = url.replace(':listItemsId',listItemsId);
-    url = url.replace(':listQuanlity',listQuanlity);
-    window.location.href = url;
+    if (typeof listItemsId != "undefined" && listItemsId != null && listItemsId.length != null&& listItemsId.length > 0){
+        window.location.href = "/update-cart/listItemsId="+listItemsId+"&listQuanlity="+listQuanlity;
+    } else {
+        window.location.href = "/view-cart-detail";
+    }
+    
 }

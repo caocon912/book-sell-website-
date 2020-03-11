@@ -38,12 +38,13 @@ Route::view('/contact','contact')->name('contact')->middleware('auth');
 //blog-detail
 Route::view('/blog-detail','blog-detail')->name('blog-detail');
 //shopping-cart
-Route::get('/view-cart-detail','CartController@getAllItemInCart')->name('view-cart-detail');
+Route::get('/view-cart-detail','CartController@getViewCart')->name('view-cart-detail');
 Route::get('/add-to-cart/{product_id}','CartController@addToCart')->name('add-to-cart');
 Route::get('/delete-item-cart/{product_id}','CartController@deleteItem')->name('delete-item-cart');
-Route::get('/update-cart/{listItemsId}/{listQuanlity}','CartController@updateCart')->name('update-cart');
+Route::get('/update-cart/listItemsId={listItemsId}&listQuanlity={listQuanlity}','CartController@updateCart')->name('update-cart');
 //checkout
-Route::view('/checkout','checkout')->name('checkout');
+Route::get('/checkout','CheckoutController@getViewCheckout')->name('checkout');
+Route::post('/checkout-submit','CheckoutController@formCheckoutSubmit')->name('checkout-submit');
 //shop
 Route::get('/shop','ShopController@getAllProduct')->name('shop');
 

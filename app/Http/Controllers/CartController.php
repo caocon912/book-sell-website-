@@ -14,6 +14,61 @@ use Config\config;
 
 class CartController extends Controller
 {
+    public function saveSessionCartToDB(Request $req){
+            $username = Auth::user()->USERNAME;
+            
+            $items_session = $req->session()->get('shopping-cart');
+
+            $cart_id = DB::table('cart')
+                        ->where('ID_USER','=',$username)
+                        ->first();
+
+            if ($cart_id == null){                
+                $ID_cart = CommonController::getNextId('cart');
+                
+                DB::table('cart')
+                    ->insert([
+                        'ID'=>$ID_cart,
+                        'ID_USER'=>$username,
+                        'TIMEOUT'=>'900',
+                        'TIME_CREATE'=>date('Y/m/d H:i:s')
+                    ]);
+                foreach ($items_session as $item){
+                    DB::table('cart_items')
+                    ->insert([
+                        'ID_CART'=>$ID_cart,
+                        'ID_PRODUCT'=>$item->ID,
+                        'QUANLITY'=>$item->QUANLITY,
+                        'STYLE'=>'',
+                        'COMMENT'=>'',
+                        'FIELD_1'=>''
+                    ]);
+                }
+            } else {
+                foreach($items_session as $item){
+                    $is_product_exist = DB::table('cart_items')->where([['ID_CART','=',$cart_id->ID],['ID_PRODUCT','=',$item->ID]])->get();
+                    if ($is_product_exist->count()==0){
+                        DB::table('cart_items')
+                        ->insert([
+                            'ID_CART'=>$cart_id->ID,
+                            'ID_PRODUCT'=>$item->ID,
+                            'QUANLITY'=>$item->QUANLITY,
+                            'STYLE'=>'',
+                            'COMMENT'=>'',
+                            'FIELD_1'=>''
+                        ]);
+                    } else {
+                        $quanlity = $is_product_exist[0]->QUANLITY;
+                        DB::table('cart_items')
+                            ->where('ID_PRODUCT','=',$item->ID)
+                            ->update([
+                                "QUANLITY"=>$quanlity + $item->QUANLITY
+                            ]);
+                    }
+                }
+            }
+            $req->session()->pull('shopping-cart',[]);
+    }
     public function getAllItemInCart(Request $req){
         
         $cart_items = null;
@@ -24,13 +79,18 @@ class CartController extends Controller
             $cart_id = DB::table('cart')
                         ->where('ID_USER','=',$username)
                         ->first();
-            
-            $cart_items = DB::table('cart_items')
-                            ->join('product','product.ID','=','cart_items.ID_PRODUCT')
-                            ->select('product.ID as ID','product.NAME as NAME','product.IMAGE as IMAGE','product.NEW_PRICE as NEW_PRICE','cart_items.QUANLITY as QUANLITY')
-                            ->where('ID_CART','=',$cart_id->ID)
-                            ->get();
 
+            if ($req->session()->exists('shopping-cart')){
+                CartController::saveSessionCartToDB($req,$cart_id);
+            }
+            
+            if ($cart_id != null){
+                $cart_items = DB::table('cart_items')
+                                ->join('product','product.ID','=','cart_items.ID_PRODUCT')
+                                ->select('product.ID as ID','product.NAME as NAME','product.IMAGE as IMAGE','product.NEW_PRICE as NEW_PRICE','cart_items.QUANLITY as QUANLITY')
+                                ->where('ID_CART','=',$cart_id->ID)
+                                ->get();
+            }
         } 
         //get all item from session
         else {
@@ -39,18 +99,20 @@ class CartController extends Controller
                 
             }
         }
-        if ($cart_items==null||empty($cart_items)){
-            echo "<script>";
-            echo "window.confirm('You don't have any items')";
-            echo "window.history.back();";
-            echo "</script>";
-        }
-        else {
-            //var_dump($cart_items);exit;
-            return view('cart',['items'=>$cart_items]);
-        }
+
+        return $cart_items;
     }
 
+    public function getViewCart(Request $req){
+        $cart_items = CartController::getAllItemInCart($req);
+        $sub_total = 0;
+        if ($cart_items!=null && count($cart_items)!=0){
+            foreach ($cart_items as $item){
+                $sub_total = $sub_total + ($item->QUANLITY * $item->NEW_PRICE);
+            }
+        }
+        return view('cart',['items'=>$cart_items,'sub_total'=>$sub_total]);
+    }
     public function addToCart(Request $req,$product_id){
         //user login save into database, else save into local storage
         if (Auth::check()){
@@ -65,7 +127,7 @@ class CartController extends Controller
                         'ID'=>$ID_cart,
                         'ID_USER'=>$username,
                         'TIMEOUT'=>'900',
-                        'TIME_CREATE'=>$DATE
+                        'TIME_CREATE'=>date('Y/m/d H:i:s')
                     ]);
                 DB::table('cart_items')
                     ->insert([
@@ -134,7 +196,10 @@ class CartController extends Controller
     //delete item
     protected function deleteItem(Request $req,$product_id){
         if (Auth::check()){
-            $item_del = DB::table('cart_items')->where('ID_PRODUCT','=',$product_id)->delete();
+            $username = Auth::user()->USERNAME;
+            $cart_id = DB::table('cart')->where('ID_USER','=',$username)->first();
+            $item_del = DB::table('cart_items')->where([['ID_CART','=',$cart_id->ID],['ID_PRODUCT','=',$product_id]])->delete();
+            $cart_info = DB::table('cart_items')->where('ID_CART','=',$cart_id->ID)->get();
         } else {
             $cart_info = $req->session()->pull('shopping-cart',[]);
             for ($i = 0;$i<count($cart_info);$i++){
@@ -145,7 +210,6 @@ class CartController extends Controller
             }
             $req->session()->put('shopping-cart',$cart_info);
         }
-        
         return redirect('view-cart-detail');
     }
     //edit cart
@@ -155,39 +219,36 @@ class CartController extends Controller
         $data = DB::table('cart')->get();
         foreach($data as $item){
             $time_create = $item->TIME_CREATE;
-            $time_remain = $DATE - $time_create;    
+            $time_remain = date('Y/m/d H:i:s') - $time_create;    
             if ($time_remain > 900){
                 DB::table('cart_items')
                     ->where('ID_CART','=',$item->ID)
                     ->delete();
                 DB::table('cart')->where('ID','=',$item->ID)->delete();
             }
-            
         }        
     }
 
-    public function updateCart(Request $req,$listQuanlity,$listItemsId){
-        echo $listItemsId;
-        echo $listQuanlity;exit;
-        $ID_items = $req->input('id_item');
-        $quanlity = $req->input('quanlity');
+    public function updateCart(Request $req,$listItemsId,$listQuanlity){
+        $listItemsId = explode(',',$listItemsId);
+        $listQuanlity = explode(',',$listQuanlity);
+       
         if (Auth::check()){
             //with user logined
             $ID_cart = DB::table('cart')
-            ->select('ID')
             ->where('ID_USER','=',Auth::user()->USERNAME)
             ->first();
 
-            for ($i = 0; $i < count($ID_items); ++$i){
-                $cart_items = DB::table()->where([['ID_CART','=',$ID_cart],['ID_PRODUCT','=',$quanlity]])->update([
-                'QUANLITY'=>$quanlity[$i]
+            for ($i = 0; $i < count($listItemsId); ++$i){
+                $cart_items = DB::table('cart_items')->where([['ID_CART','=',$ID_cart->ID],['ID_PRODUCT','=',$listItemsId[$i]]])->update([
+                'QUANLITY'=>$listQuanlity[$i]
                 ]);
             }
         } else {
             $cart_info = $req->session()->pull('shopping-cart',[]);
-            for($i = 0;$i < count($ID_items); ++$i){
-                if ($cart_info[$i]->ID == $ID_items[$i]){
-                    $cart_info[$i]->QUANLITY = $quanlity[$i];
+            for($i = 0;$i < count($listItemsId); ++$i){
+                if ($cart_info[$i]->ID == $listItemsId[$i]){
+                    $cart_info[$i]->QUANLITY = $listQuanlity[$i];
                 }
             }
             $req->session()->put('shopping-cart',$cart_info);    

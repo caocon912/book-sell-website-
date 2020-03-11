@@ -50,7 +50,10 @@
                                     <td class="total-price first-row">$60.00</td>
                                     <td class="close-td first-row"><i class="ti-close"></i></td>
                                 </tr> -->
+                                @if ($items != null&&count($items)!=0)
+                                
                                 @foreach($items as $item)
+                                
                                 <input type="hidden" value = "{{$item->ID}}" name="id_item">
                                 <tr>
                                     <td class="cart-pic"><img src="{{$item->IMAGE}}" alt=""></td>
@@ -69,13 +72,16 @@
                                     <td class="close-td"><a href="{{route('delete-item-cart',['product_id'=>$item->ID])}}"><i class="ti-close"></i></a></td>
                                 </tr>
                                 @endforeach
+                                @else
+                                    <tr><td colspan="6">You have no items in cart.</td></tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="cart-buttons">
-                                <a href="#" class="primary-btn continue-shop">Continue shopping</a>
+                                <a href="{{route('shop')}}" class="primary-btn continue-shop">Continue shopping</a>
                                 <button class="primary-btn up-cart" onclick="getListItemId();">Update cart</button>
                             </div>
                     
@@ -90,10 +96,10 @@
                         <div class="col-lg-4 offset-lg-4">
                             <div class="proceed-checkout">
                                 <ul>
-                                    <li class="subtotal">Subtotal <span>$240.00</span></li>
-                                    <li class="cart-total">Total <span>$240.00</span></li>
+                                    <li class="subtotal">Subtotal <span>{{$sub_total}}</span></li>
+                                    <li class="cart-total">Total <span>{{$sub_total}}</span></li>
                                 </ul>
-                                <a href="#" class="proceed-btn">PROCEED TO CHECK OUT</a>
+                                <a href="{{route('checkout')}}" class="proceed-btn">PROCEED TO CHECK OUT</a>
                             </div>
                         </div>
                     </div>
