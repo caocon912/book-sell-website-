@@ -1,33 +1,28 @@
-$('.add-to-cart').click(function() {
-
-    var cart = $('.icon_bag_alt');
- 
-    var imgtofly = $(this).parents('div.product-item').find('a.product-image img').eq(0);
- 
-     if (imgtofly) {
- 
-         var imgclone = imgtofly.clone()
- 
-             .offset({ top:imgtofly.offset().top, left:imgtofly.offset().left })
- 
-             .css({'opacity':'0.7', 'position':'absolute', 'height':'150px', 'width':'150px', 'z-index':'1000'})
- 
-             .appendTo($('body'))
- 
-             .animate({
- 
-                 'top':cart.offset().top + 10,
- 
-                 'left':cart.offset().left + 30,
- 
-                 'width':55,
- 
-                 'height':55
- 
-             }, 1000, 'easeInElastic');
- 
-         imgclone.animate({'width':0, 'height':0}, function(){ $(this).detach() });
- 
-     }
- 
-     return false;
+function getListItemId(){
+    var listItemsId=[];
+    var listQuanlity=[];
+    var divElement = document.getElementById('cart-table');
+    var inputElements = divElement.getElementsByTagName('input');
+    for (i = 0; i<inputElements.length; i++){
+        if (inputElements[i].type != 'number')
+            continue;
+        var quanlityItem = inputElements[i].value;
+        console.log(quanlityItem);
+        if (!isNaN(quanlityItem)){
+            listQuanlity.push(quanlityItem);
+        }
+    }
+    for (i = 0; i<inputElements.length; i++){
+        if (inputElements[i].type == 'hidden'){
+            var idItem = inputElements[i].value;
+            console.log(idItem);
+            listItemsId.push(idItem);
+        }
+    }
+    if (typeof listItemsId != "undefined" && listItemsId != null && listItemsId.length != null&& listItemsId.length > 0){
+        window.location.href = "/update-cart/listItemsId="+listItemsId+"&listQuanlity="+listQuanlity;
+    } else {
+        window.location.href = "/view-cart-detail";
+    }
+    
+}
