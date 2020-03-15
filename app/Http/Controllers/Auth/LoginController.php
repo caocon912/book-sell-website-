@@ -58,7 +58,13 @@ class LoginController extends Controller
         if (Auth::attempt(['username'=>$req->input('username'),'password'=>$req->input('pwd')])){
             return redirect('shop');
         } else {
-            redirect()->back();
+            echo "<script>
+                    var dicision = window.confirm('Incorrect login');
+                    if (dicision == true){
+                        window.history.back();
+                    }
+                  </script>";
+            //return redirect()->back();
         }
 
     }
