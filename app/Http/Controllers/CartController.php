@@ -14,6 +14,24 @@ use Config\config;
 
 class CartController extends Controller
 {
+    public function checkCartExistInDB(){
+        $cart_id = DB::table('cart')
+                        ->where('ID_USER','=',$username)
+                        ->first();
+            if ($cart_id == null){                
+                $ID_cart = CommonController::getNextId('cart');
+            }
+    }
+    public function totalOfCart(Request $req){
+        $cart_items = CartController::getAllItemInCart($req);
+        $sub_total = 0;
+        if ($cart_items!=null && count($cart_items)!=0){
+            foreach ($cart_items as $item){
+                $sub_total = $sub_total + ($item->QUANLITY * $item->NEW_PRICE);
+            }
+        }
+        return $sub_total;
+    }
     public function saveSessionCartToDB(Request $req){
             $username = Auth::user()->USERNAME;
             
@@ -72,7 +90,7 @@ class CartController extends Controller
     public function getAllItemInCart(Request $req){
         
         $cart_items = null;
-        
+   
         //get ID cart with user login
         if (Auth::check()){
             $username = Auth::user()->USERNAME;
@@ -87,10 +105,11 @@ class CartController extends Controller
             if ($cart_id != null){
                 $cart_items = DB::table('cart_items')
                                 ->join('product','product.ID','=','cart_items.ID_PRODUCT')
-                                ->select('product.ID as ID','product.NAME as NAME','product.IMAGE as IMAGE','product.NEW_PRICE as NEW_PRICE','cart_items.QUANLITY as QUANLITY')
+                                ->select('product.ID as ID','product.NAME as NAME','product.IMAGE as IMAGE','product.NEW_PRICE as NEW_PRICE','cart_items.QUANLITY as QUANLITY','cart_items.ID_CART as ID_CART')
                                 ->where('ID_CART','=',$cart_id->ID)
                                 ->get();
             }
+    
         } 
         //get all item from session
         else {
