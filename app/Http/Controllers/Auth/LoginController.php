@@ -60,11 +60,12 @@ class LoginController extends Controller
             return redirect()->intended('shop');
         } else {
             echo "<script>
-                    var tmp = window.confirm('Username or password is not incorrect');
-                    if (tmp==true){
+                    var dicision = window.confirm('Incorrect login');
+                    if (dicision == true){
                         window.history.back();
                     }
-                </script>";
+                  </script>";
+            //return redirect()->back();
         }
     }
 
