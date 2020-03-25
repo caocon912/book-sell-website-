@@ -125,7 +125,7 @@
                                     </div>
                                     <div class="select-button">
                                         <a href="{{route('view-cart-detail')}}" class="primary-btn view-card">VIEW CARD</a>
-                                        <a href="#" class="primary-btn checkout-btn">CHECK OUT</a>
+                                        <a href="{{route('checkout')}}" class="primary-btn checkout-btn">CHECK OUT</a>
                                     </div>
                                 </div>
                             </li>

@@ -21,11 +21,11 @@ class CheckoutController extends Controller
         $cart_info = app('App\Http\Controllers\CartController')->getAllItemInCart($req);
         $total_pay = app('App\Http\Controllers\CartController')->totalOfCart($req);
         $customer = null;
-
+        if (Auth::check()){
             $customer_info = CheckoutController::checkCustomerIsExist(Auth::user()->USERNAME);
-
-        if ($customer_info != false){
-            $customer = $customer_info[0];
+            if ($customer_info != false){
+                $customer = $customer_info[0];
+            }
         }
         return view('checkout',['cart_items'=>$cart_info,'total_pay'=>$total_pay,'customer_info'=>$customer]);
     }
