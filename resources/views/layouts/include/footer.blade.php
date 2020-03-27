@@ -85,7 +85,6 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <script src="{{asset('app-assets/js/owl.carousel.min.js')}}"></script>
     <script src="{{asset('app-assets/js/main.js')}}"></script>
     <script src="{{asset('app-assets/js/032020.js')}}"></script>
-
 </body>
 
 </html>

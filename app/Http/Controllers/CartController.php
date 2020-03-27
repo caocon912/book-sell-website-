@@ -121,7 +121,39 @@ class CartController extends Controller
 
         return $cart_items;
     }
+    public static function getNewestItemsInCart(Request $req){
+        $cart_items = null;
+        $sub_total = 0;
+        //get ID cart with user login
+        if (Auth::check()){
+            $username = Auth::user()->USERNAME;
+            $cart_id = DB::table('cart')
+                        ->where('ID_USER','=',$username)
+                        ->first();
 
+            if ($req->session()->exists('shopping-cart')){
+                CartController::saveSessionCartToDB($req,$cart_id);
+            }
+            
+            if ($cart_id != null){
+                $cart_items = DB::table('cart_items')
+                                ->join('product','product.ID','=','cart_items.ID_PRODUCT')
+                                ->select('product.ID as ID','product.NAME as NAME','product.IMAGE as IMAGE','product.NEW_PRICE as NEW_PRICE','cart_items.QUANLITY as QUANLITY','cart_items.ID_CART as ID_CART')
+                                ->where('ID_CART','=',$cart_id->ID)
+                                ->skip(10)->take(5)
+                                ->get();
+            }
+    
+        } 
+        //get all item from session
+        else {
+            if ($req->session()->exists('shopping-cart')){
+                $cart_items = $req->session()->get('shopping-cart');
+            }
+        }
+        $sub_total = 0;
+        return view('header',['cart_items'=>$cart_items,'sub_total'=>$sub_total]);
+    }
     public function getViewCart(Request $req){
         $cart_items = CartController::getAllItemInCart($req);
         $sub_total = 0;
@@ -182,7 +214,7 @@ class CartController extends Controller
             $item_add = DB::table('product')->where('ID','=',$product_id)->first();
             $cart_info = $req->session()->pull('shopping-cart',[]);
             $number_of_item = count($cart_info);
-            if ($cart_info != null || $number_of_item != 0){
+            if ($cart_info != null && $number_of_item != 0){
                
                 $is_item_exist = false;
 

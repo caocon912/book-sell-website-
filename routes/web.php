@@ -47,7 +47,7 @@ Route::get('/checkout','CheckoutController@getViewCheckout')->name('checkout');
 Route::post('/checkout-submit','CheckoutController@formCheckoutSubmit')->name('checkout-submit');
 //shop
 Route::get('/shop','ShopController@getAllProduct')->name('shop');
-
+Route::get('/add-favorite-item/{product_id}/{product_name}/{product_price}','ShopController@addFavoriteItemList')->name('add-favorite-items');
 /*=======================================ADMIN ROUTE============================================================================*/
 //admin
 Route::view('/admin','admin')->name('admin');

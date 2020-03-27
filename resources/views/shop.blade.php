@@ -145,11 +145,11 @@
                             <div class="col-lg-4 col-sm-6">
                                 <div class="product-item">
                                     <div class="pi-pic">
-                                        <img src="{{asset('app-assets/img/products/women-2.jpg')}}" alt="product_img">
+                                        <img src="{{asset('app-assets/img/products/doremon-shirt.jpg')}}" alt="product_img">
                                         <div class="sale pp-sale">Sale</div>
                                         <div class="icon">
-                                            <i class="icon_heart_alt"></i>
-                                        </div>
+                                        <button class="icon_heart_alt"><a href="{{route('add-favorite-items',['product_id'=>$product->ID,'product_name'=>$product->NAME,'product_price'=>$product->NEW_PRICE])}}"></a></button>
+                                        </div>                                                                                                                                                                                                                                                         
                                         <ul>
                                             <li class="w-icon active"><button class="add-to-cart"><a href="{{route('add-to-cart',['product_id'=>$product->ID])}}"><i class="icon_bag_alt"></i></a></button></li>
                                             <li class="quick-view"><a href="">+ Quick View</a></li>

@@ -104,24 +104,30 @@
                                     <div class="select-items">
                                         <table>
                                             <tbody>
+                                            @if ($cart_items ?? '' !=null && count($cart_items ?? '')!=0)
+                                                @foreach($cart_items ?? '' as $item)
                                                 <tr>
                                                     <td class="si-pic"><img src="{{asset('app-assets/img/select-product-2.jpg')}}" alt=""></td>
                                                     <td class="si-text">
-                                                        <div class="product-selected">
-                                                            <p>$60.00 x 1</p>
-                                                            <h6>Kabino Bedside Table</h6>
+                                                        <div class="product-selected">                 
+                                                            <p>{{$item->NEW_PRICE}} X {{$item->QUANLITY}}</p>
+                                                            <h6>{{$item->NAME}}</h6>
                                                         </div>
                                                     </td>
                                                     <td class="si-close">
                                                         <i class="ti-close"></i>
                                                     </td>
                                                 </tr>
+                                                @endforeach
+                                            @else
+                                                <h6>Don't have any items</h6>
+                                            @endif
                                             </tbody>
                                         </table>
                                     </div>
                                     <div class="select-total">
                                         <span>total:</span>
-                                        <h5>$120.00</h5>
+                                        <h5>{{$sub_total ?? ''}}</h5>
                                     </div>
                                     <div class="select-button">
                                         <a href="{{route('view-cart-detail')}}" class="primary-btn view-card">VIEW CARD</a>
