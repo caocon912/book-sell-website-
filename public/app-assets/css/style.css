@@ -178,7 +178,18 @@ ol {
 }
 
 /* buttons */
+.add-to-cart {
+	background: #e7ab3c;
+	border: none;
+}
+.icon_heart_alt {
+	background: none;
+	border: none;
+}
 
+.icon_heart_alt  a:hover {
+	color: red;
+}
 .primary-btn {
 	display: inline-block;
 	font-size: 14px;

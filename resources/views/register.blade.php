@@ -22,7 +22,7 @@
                 <div class="col-lg-6 offset-lg-3">
                     <div class="register-form">
                         <h2>Register</h2>
-                        <form action="{{route('logup-submit')}}" method="post">
+                        <form action="{{route('register-submit')}}" method="post">
                             @csrf
                             <div class="group-input">
                                 <label for="username">Username *</label>

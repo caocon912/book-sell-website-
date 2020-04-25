@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
 {
@@ -38,7 +39,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('verified')->except('logout');
     }
     /**
      * return username
@@ -47,7 +48,7 @@ class LoginController extends Controller
      */
     public function username()
     {
-        return 'username';
+        return 'USERNAME';
     }
     
     protected function guard(){
@@ -55,8 +56,11 @@ class LoginController extends Controller
     }
 
     public function authenticate(Request $req){
-        $credential = $req->only('username','pwd');
-        if (Auth::attempt(['username'=>$req->input('username'),'password'=>$req->input('pwd')])){
+        $credentials = [
+            'username'=> $req->input('username'),
+            'password' => $req->input('pwd')
+        ];
+        if (Auth::attempt($credentials)){
             return redirect()->intended('shop');
         } else {
             echo "<script>

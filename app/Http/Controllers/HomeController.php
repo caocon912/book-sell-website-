@@ -32,10 +32,10 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function getData(){
-        $cartInfo = CartController::getAllItemInCart();
-        $cartQuanlity = $cartInfo->count();
-        
-        return view('home',['cart'=>$cartInfo,'cartQuanlity'=>$cartQuanlity]);
+    public function getData(Request $req){
+        $cartInfo = app('App\Http\Controllers\CartController')->getAllItemInCart($req);
+        //$cartQuanlity = $cartInfo->count();
+        //,'cartQuanlity'=>$cartQuanlity
+        return view('home',['cart'=>$cartInfo]);
     }
 }

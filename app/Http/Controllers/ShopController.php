@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Model\ProductObject;
 class ShopController extends Controller
 {
+    
     //get all the product 
     protected function getAllProduct(){
         $products = DB::table('product')

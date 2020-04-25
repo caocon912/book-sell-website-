@@ -82,7 +82,7 @@
                         <div class="col-lg-4">
                             <div class="cart-buttons">
                                 <a href="{{route('shop')}}" class="primary-btn continue-shop">Continue shopping</a>
-                                <button class="primary-btn up-cart" onclick="getListItemId();">Update cart</button>
+                                <button class="primary-btn up-cart" onclick="getListItemId('update-cart');">Update cart</button>
                             </div>
                     
                             <div class="discount-coupon">

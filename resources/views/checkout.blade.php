@@ -38,16 +38,16 @@
                                 <input type="text" id="fir" name="full-name" @if($customer_info != null) value="{{$customer_info->NAME}}" @else value="" @endif >
                             </div>
                             <div class="col-lg-12">
-                                <label for="cun-name">Company Name</label>
-                                <input type="text" id="cun-name" name="company-name" @if($customer_info != null) value="{{$customer_info->ADDRESS_1}}" @else value="" @endif >
+                                <label for="cun-name">Home address</label>
+                                <input type="text" id="cun-name" name="address_1" @if($customer_info != null) value="{{$customer_info->ADDRESS_1}}" @else value="" @endif >
                             </div>
                             <!-- <div class="col-lg-12">
                                 <label for="cun">Country<span>*</span></label>
                                 <input type="text" id="cun" name="country">
                             </div> -->
                             <div class="col-lg-12">
-                                <label for="street">Street Address<span>*</span></label>
-                                <input type="text" id="street" class="street-first" name="street-address" @if($customer_info != null) value="{{$customer_info->ADDRESS}}" @else value="" @endif >
+                                <label for="street">Company address<span>*</span></label>
+                                <input type="text" id="street" class="street-first" name="address_2" @if($customer_info != null) value="{{$customer_info->ADDRESS_2}}" @else value="" @endif >
                             </div>
                             <!-- <div class="col-lg-12">
                                 <label for="zip">Postcode / ZIP (optional)</label>
@@ -63,7 +63,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <label for="phone">Phone<span>*</span></label>
-                                <input type="text" id="phone" name="phone" @if($customer_info != null) value="{{$customer_info->PHONE}}" @else value="" @endif >
+                                <input type="text" id="phone" name="phone" @if($customer_info != null) value="{{$customer_info->PHONE_NUMBER}}" @else value="" @endif >
                             </div>
                             <!-- <div class="col-lg-12">
                                 <div class="create-item">

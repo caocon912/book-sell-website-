@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Mail\ConfirmRegisterMail;
+use Illuminate\Support\Facades\Mail;
 
 class RegisterController extends Controller
 {
@@ -66,12 +68,7 @@ class RegisterController extends Controller
      */
     protected function create(Request $req)
     {
-        // return User::create([
-        //     'name' => $data['name'],
-        //     'email' => $data['email'],
-        //     'password' => Hash::make($data['password']),
-        // ]);
-
+        
         $users = DB::table('user')->where('USERNAME','=',$req->input('username'),'or','EMAIL','=',$req->input('email'))->get();
         $userCount = $users->count();
         if ($userCount==0){
@@ -79,17 +76,25 @@ class RegisterController extends Controller
                         'USERNAME'=>$req->input('username'),
                         'EMAIL'=>$req->input('email'),
                         'PASSWORD'=>Hash::make($req->input('pwd')),
-                        'STATUS'=>'1',
-                        'COUNT_LOGIN'=>'1'
+                        'STATUS'=>'0',
+                        'COUNT_LOGIN'=>'1',
+                        'CREATE_AT'=>date('Y/m/d H:i:s')
             ]);
             $req->session()->put([
                 'username'=>$req->input('username'),
                 'level'=>'2'
             ]);
+            // send mail authentication
+            Mail::to($req->input('email'))->send(new ConfirmRegisterMail());
             return redirect('shop');
         } else {
-            echo ('Trùng username hoặc email');
-            return redirect()->back();
+            echo "<script>
+                    var dicision = window.confirm('username or email is exists');
+                    if (dicision == true){
+                        window.history.back();
+                    }
+                  </script>";
+            //return redirect()->back();
         }
     }
 

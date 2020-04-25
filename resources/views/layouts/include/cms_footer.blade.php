@@ -33,7 +33,15 @@
   <!--script for this page-->
   <script src="{{asset('cms-assets/lib/sparkline-chart.js')}}"></script>
   <script src="{{asset('cms-assets/lib/zabuto_calendar.js')}}"></script>
+  <script src="{{asset('js/032020.js')}}"></script>
   <script type="text/javascript">
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    </script>
+  {{-- <script type="text/javascript">
     $(document).ready(function() {
       var unique_id = $.gritter.add({
         // (string | mandatory) the heading of the notification
@@ -52,7 +60,7 @@
 
       return false;
     });
-  </script>
+  </script> --}}
   <script type="application/javascript">
     $(document).ready(function() {
       $("#date-popover").popover({
@@ -86,14 +94,18 @@
           }
         ]
       });
+        $('#myModal').on('shown.bs.modal', function () {
+          $('#myInput').trigger('focus')
+        });
+
     });
 
-    function myNavFunction(id) {
-      $("#date-popover").hide();
-      var nav = $("#" + id).data("navigation");
-      var to = $("#" + id).data("to");
-      console.log('nav ' + nav + ' to: ' + to.month + '/' + to.year);
-    }
+    // function myNavFunction(id) {
+    //   $("#date-popover").hide();
+    //   var nav = $("#" + id).data("navigation");
+    //   var to = $("#" + id).data("to");
+    //   console.log('nav ' + nav + ' to: ' + to.month + '/' + to.year);
+    // }
   </script>
 </body>
 

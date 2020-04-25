@@ -7,6 +7,7 @@
   <meta name="description" content="">
   <meta name="author" content="Dashboard">
   <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
   <title>Admin Page</title>
 
   <!-- Favicons -->
@@ -22,7 +23,10 @@
   <!-- Custom styles for this template -->
   <link href="{{asset('cms-assets/css/style.css')}}" rel="stylesheet">
   <link href="{{asset('cms-assets/css/style-responsive.css')}}" rel="stylesheet">
+  <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
   <script src="{{asset('cms-assets/lib/chart-master/Chart.js')}}"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js' type='text/javascript'></script>
 
   <!-- =======================================================
     Template Name: Dashio
