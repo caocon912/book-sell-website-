@@ -7,7 +7,6 @@
   <meta name="description" content="">
   <meta name="author" content="Dashboard">
   <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
-  <meta name="csrf-token" content="{{ csrf_token() }}" />
   <title>Admin Page</title>
 
   <!-- Favicons -->
@@ -236,7 +235,7 @@
       </div>
       <div class="top-menu">
         <ul class="nav pull-right top-menu">
-          <li><a class="logout" href="login.html">Logout</a></li>
+        <li><a class="logout" href="{{route('logout')}}">Logout</a></li>
         </ul>
       </div>
     </header>
@@ -249,9 +248,15 @@
           <p class="centered"><a href="profile.html"><img src="img/ui-sam.jpg" class="img-circle" width="80"></a></p>
           <h5 class="centered">Sam Soffes</h5>
           <li class="mt">
-            <a class="active" href="index.html">
+          <a class="sub-menu" href="{{route('admin')}}">
               <i class="fa fa-dashboard"></i>
               <span>Trang chủ</span>
+              </a>
+          </li>
+          <li class="sub-menu">
+            <a href="{{route('admin-user')}}">
+              <i class="fa fa-desktop"></i>
+              <span>Quản lý tài khoản</span>
               </a>
           </li>
           <li class="sub-menu">

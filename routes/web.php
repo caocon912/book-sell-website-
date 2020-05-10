@@ -20,7 +20,7 @@
 // ]);
 Auth::routes(['verify' => true]);
 //start project
-Route::get('/','HomeController@getData')->name('home');
+//Route::get('/','HomeController@getData')->name('home');
 
 //log-in
 Route::view('/login','auth.login')->name('login');
@@ -46,7 +46,7 @@ Route::get('/update-cart/listItemsId={listItemsId}&listQuanlity={listQuanlity}',
 Route::get('/checkout','CheckoutController@getViewCheckout')->name('checkout');
 Route::post('/checkout-submit','CheckoutController@formCheckoutSubmit')->name('checkout-submit');
 //shop
-Route::get('/shop','ShopController@getAllProduct')->name('shop');
+Route::get('/','ShopController@getAllProduct')->name('shop');
 Route::get('/add-favorite-item/{product_id}/{product_name}/{product_price}','ShopController@addFavoriteItemList')->name('add-favorite-items');
 //product
 Route::get('/product-detail/{product_id}','ProductController@getViewDetail')->name('product-detail');
@@ -55,7 +55,21 @@ Route::get('/profile/{username}','UserController@getView')->name('profile');
 Route::post('/update-profile/{username}','UserController@updateUserInfo')->name('update-user');
 /*=======================================ADMIN ROUTE============================================================================*/
 //admin
-Route::view('/admin','admin')->name('admin')->middleware('checkrole');
+Route::get('/admin','CommonController@getNotification')->name('admin')->middleware('checkrole');
+//Route::view('/admin','admin')->name('admin')->middleware('checkrole');
+//login admin
+//Route::view('/login-admin','admin-login')->name('login-admin');
+//Route::get('/admin','AdminController@getView')->name('admin')->middleware('checkrole');
+//user
+Route::group(['prefix'=>'admin-user','middleware'=>'isrole'],function(){
+    Route::get('/','UserController@getAllUser')->name('admin-user');
+    Route::get('/add','UserController@addUser')->name('add-user');
+    Route::post('/add-submit','UserController@insertUser')->name('add-user-submit');
+    Route::get('/edit/{user_id}','UserController@editUser')->name('edit-user');
+    Route::post('/edit-submit/{user_id}','UserController@updateUser')->name('edit-user-submit');
+    Route::get('/delete/{user_id}','UserController@deleteUser')->name('delete-user');
+});
+
 //category
 Route::group(['prefix'=>'admin-category','middleware'=>'isrole'],function(){
     Route::get('/','AdminCategoryController@getAllCategory')->name('admin-category');
@@ -81,7 +95,7 @@ Route::group(['prefix'=>'admin-order','middleware'=>'isrole'],function(){
     Route::get('/','AdminOrderController@getView')->name('admin-order');
     Route::get('/add-order','AdminOrderController@addOrder')->name('add-order');
     Route::get('/get-product/c_id={category_id}','AdminOrderController@getProductByCategoryId');
-    Route::get('/add-order-submit','AdminOrderController@insertOrder')->name('add-order-submit');
+    Route::post('/add-order-submit','AdminOrderController@insertOrder')->name('add-order-submit');
     Route::get('/delete/{order_id}','AdminOrderController@deleteOrder')->name('delete-order');
     Route::get('/detail-order/{order_id}/{popup}','AdminOrderController@getViewDetail')->name('detail-order');
     Route::post('/edit-detail-submit/{order_id}','AdminOrderController@editOrderDetailSubmit')->name('submit-edit-order-detail');
@@ -90,10 +104,10 @@ Route::group(['prefix'=>'admin-order','middleware'=>'isrole'],function(){
 
 });
 //ajax
-Route::group(['prefix'=>'ajax','middleware'=>'isrole'],function(){
-Route::get('/get-product/c_id={category_id}','AjaxController@getProductByCategoryId')->name('get-product-ajax');
-Route::get('/add-product/p_id={product_id}','AjaxController@addProductIntoOrder')->name('add-product-ajax');
-Route::get('/delete-product/p_id={product_id}','AjaxController@deleteProductIntoOrder')->name('delete-product-ajax');
-Route::get('/get-category/c_id={category_id}','AjaxController@getCategory')->name('get-category-ajax');
+Route::group(['prefix'=>'ajax'],function(){
+    Route::get('/get-product/c_id={category_id}','AjaxController@getProductByCategoryId')->name('get-product-ajax');
+    Route::get('/add-product/p_id={product_id}','AjaxController@addProductIntoOrder')->name('add-product-ajax');
+    Route::get('/delete-product/p_id={product_id}','AjaxController@deleteProductIntoOrder')->name('delete-product-ajax');
+    Route::get('/get-category/c_id={category_id}','AjaxController@getCategory')->name('get-category-ajax');
 });
-Route::get('/home', 'HomeController@index')->name('home');
+

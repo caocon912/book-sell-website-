@@ -36,7 +36,7 @@ class AdminProductController extends Controller
         $products = DB::table('product')
                         ->join('category','category.ID','=','product.CATEGORY_ID')
                         ->select('product.*','category.NAME as CATEGORY_NAME')
-                        ->get();
+                        ->paginate(5);
         $categories = DB::table('category')
                         ->select('ID','NAME','STATUS')
                         ->where('STATUS','=',1)
@@ -55,14 +55,14 @@ class AdminProductController extends Controller
 
     //insert product
     protected function insertProduct(Request $req){
-        // $req->validate([
-        //     'name'=>'required|max:255',
-        //     'category'=>'required',
-        //     'amount'=>'required|integer',
-        //     'new_price'=>'required|integer',
-        //     'old_price'=>'integer',
-        //     'amount'=>'integer'
-        // ]);
+        $validateData = $req->validate([
+            'name'=>'required|max:255',
+            'category'=>'required',
+            'amount'=>'required|integer',
+            'new_price'=>'required|integer',
+            'old_price'=>'integer',
+            'amount'=>'integer'
+        ]);
         //upload image
         if ($req->hasFile('imageUpload')){
             $image = $req->file('imageUpload');
@@ -127,6 +127,14 @@ class AdminProductController extends Controller
     
     //update edit product
     protected function updateProduct($product_id,Request $req){
+        $validateData = $req->validate([
+            'name'=>'required|max:255',
+            'category'=>'required',
+            'amount'=>'required|integer',
+            'new_price'=>'required|integer',
+            'old_price'=>'integer',
+            'amount'=>'integer'
+        ]);
         if ($req->hasFile('imageUpload')){
             $image = $req->file('imageUpload');
             $file_name = time() . '.' . $image->getClientOriginalName();

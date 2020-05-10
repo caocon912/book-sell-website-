@@ -47,7 +47,10 @@ function loadProductByCategoryId(){
             document.getElementById('product').innerHTML = xmlhttp.responseText;
         }
     }
+    // var url = "{{route('get-product-ajax1',[':category_id'])}}";
+    // url = url.replace(':category_id',category_id);
     xmlhttp.open('GET','/ajax/get-product/c_id='+category_id,true);
+    //xmlhttp.open('GET',url,true);
     xmlhttp.send();
 
 }
@@ -66,15 +69,6 @@ function addProductIntoOrder(){
             }
         });
     }   
-    // var product_id = document.getElementById('product').value;
-    // var xmlhttp = new XMLHttpRequest();
-    // xmlhttp.onreadystatechange = function(){
-    //     if (this.readyState == 4 && this.status == 200){
-    //         document.getElementById('product_table').innerHTML = xmlhttp.responseText;
-    //     }
-    // }
-    // xmlhttp.open('GET','/ajax-add-product/p_id='+product_id,true);
-    // xmlhttp.send();
 }
 
 function deleteOrderItem(p_id){

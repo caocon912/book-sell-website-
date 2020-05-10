@@ -6,7 +6,6 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text product-more">
-                        <a href="{{route('home')}}"><i class="fa fa-home"></i> Home</a>
                         <a href="{{route('shop')}}">Shop</a>
                         <span>Shopping Cart</span>
                     </div>

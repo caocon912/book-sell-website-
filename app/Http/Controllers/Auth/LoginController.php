@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
+use App\Http\Requests\UserInfoRequest;
+date_default_timezone_set('Asia/Saigon'); 
 class LoginController extends Controller
 {
     /*
@@ -29,6 +31,8 @@ class LoginController extends Controller
      * Where to redirect users after login.
      *
      * @var string
+     * 
+     * 
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
@@ -39,7 +43,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('verified')->except('logout');
+        $this->middleware('guest')->except('logout');
     }
     /**
      * return username
@@ -56,31 +60,56 @@ class LoginController extends Controller
     }
 
     public function authenticate(Request $req){
+
+        $validateData = $req->validate([
+            'username'=>'required|max:20',
+            'pwd'=>'required|min:6|max:20',
+        ]);
+
         $credentials = [
             'username'=> $req->input('username'),
-            'password' => $req->input('pwd')
+            'password' => $req->input('pwd'),
+            'STATUS' => 1
         ];
         if (Auth::attempt($credentials)){
-            return redirect()->intended('shop');
+            $user = Auth::user();
+            DB::beginTransaction();
+            try{
+                $user = DB::table('user')->where('USERNAME','=',$user->USERNAME)->first();
+                $count_login = $user->COUNT_LOGIN;
+                DB::table('user')->where('USERNAME','=',$user->USERNAME)->update(['COUNT_LOGIN'=>$count_login + 1]);
+                DB::commit();
+            } catch(Exception $e){
+                DB::rollback();
+            }
+            return redirect()->route('shop')->with('success-message','Log in successfully!');
         } else {
-            echo "<script>
-                    var dicision = window.confirm('Incorrect login');
-                    if (dicision == true){
-                        window.history.back();
-                    }
-                  </script>";
-            //return redirect()->back();
+            return redirect()->route('login')->with('error-message','Username or password not correct!Or your account not active');
         }
     }
 
     public function logout(){
+        $username = Auth::user()->USERNAME;
+        $result = DB::table('user')->join('role','role.ID','=','user.level')
+            ->where([
+                ['user.USERNAME','=',$username],
+                ['user.STATUS','=',1]
+            ])
+            ->select('role.NAME as ROLE_NAME','user.ID','user.USERNAME','user.NAME','user.LEVEL','user.EMAIL','user.COUNT_LOGIN','user.STATUS')
+            ->first();
+        $flag = false;
+        if ($result->ROLE_NAME=='ADMIN'){
+            $flag = true;
+        }
         Auth::logout();
         if (Auth::check()==false){
-            echo "<script>
-                    window.alert('You logout successfully!');
-                </script>";
-            return redirect('home');
+            if ($flag == true){
+                //return redirect()->route('login-admin');
+                return redirect()->route('shop')->with('success-message','Log out successfully!');
+            } else {
+                return redirect()->route('shop')->with('success-message','Log out successfully!');
+            }
+            
         }
     }
-    
 }

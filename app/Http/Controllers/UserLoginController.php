@@ -29,12 +29,12 @@ class UserLoginController extends Controller
                 'level'=>$infoUser->LEVEL
             ]);
             echo "<script>window.confirm('Log in successfully!')</script>";
-            return redirect('shop');
+            return redirect()->route('shop');
 
         } else {
             //bao loi ra man hinh
             echo "<script>alert('Username or password do not correct!')</script>";
-            return redirect()->back();
+            return redirect()->back()->with();
         }
     }
 }

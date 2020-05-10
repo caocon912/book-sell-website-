@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class AdminOrderController extends Controller
 {
@@ -12,13 +13,13 @@ class AdminOrderController extends Controller
         $orders = DB::table('orders')
                     ->join('orders_detail','orders.ID','=','orders_detail.ID_ORDER')
                     ->select('orders.ID as ID','orders_detail.TOTAL as TOTAL','orders.CREATE_AT as CREATE_AT','orders_detail.ID_CUSTOMER as ID_CUSTOMER','orders_detail.PHONE_NUMBER as PHONE_NUMBER','orders_detail.ADDRESS_1 as ADDRESS_1','orders_detail.ADDRESS_2 as ADDRESS_2','orders.STATUS')
-                    ->get();
+                    ->paginate(5);
         return $orders;            
     }
     public function getOrdersDetail($order_id){
         $order_info = null;
         $order_info = DB::table('orders_detail')
-                        ->join('customer','orders_detail.ID','=','customer.ID')
+                        ->join('customer','orders_detail.ID_CUSTOMER','=','customer.ID')
                         ->select('orders_detail.ID as ID','orders_detail.ID_ORDER as ID_ORDER','TOTAL','ID_CUSTOMER','orders_detail.CREATE_AT as CREATE_AT','orders_detail.ADDRESS_1 as ADDRESS_1','ADDRESS_2','PHONE_NUMBER','STATUS','customer.NAME as CUSTOMER_NAME','customer.USERNAME as USERNAME','customer.EMAIL as EMAIL')
                         ->where('orders_detail.ID_ORDER','=',$order_id)
                         ->first();
@@ -37,21 +38,39 @@ class AdminOrderController extends Controller
         $orders = $this->getAllOrders();
         return view('admin-order',['orders'=>$orders]);
     }
-    public function getViewDetail($order_id,$popup = 0){
+    public function getViewDetail(Request $req,$order_id,$popup = 0){
+        $req->session()->flush('order-items');
+        $categories = DB::table('category')->select('ID','NAME')->where('STATUS','=',1)->get();
         $order_detail = $this->getOrdersDetail($order_id);
         $order_items = $this->getItemsOfOrders($order_id);
-        return view('admin-order-detail',['order_detail'=>$order_detail,'order_items'=>$order_items,'popup'=>$popup]);
+        return view('admin-order-detail',['order_detail'=>$order_detail,'order_items'=>$order_items,'popup'=>$popup,'categories'=>$categories]);
     }
     protected function deleteOrder($order_id){
-        DB::table('customer')->where('ID_ORDER','=',$order_id)->delete();
-        DB::table('orders_item')->where('ID_ORDER','=',$order_id)->delete();
-        DB::table('orders_detail')->where('ID_ORDER','=',$order_id)->delete();
-        DB::table('orders')->where('ID','=',$order_id)->delete();
+        DB::beginTransaction();
+        try{
+            DB::table('customer')->where('ID_ORDER','=',$order_id)->delete();
+            DB::table('orders_item')->where('ID_ORDER','=',$order_id)->delete();
+            DB::table('orders_detail')->where('ID_ORDER','=',$order_id)->delete();
+            DB::table('orders')->where('ID','=',$order_id)->delete();
+            
+            DB::commit();
+        } catch(Exception $e){
+            DB::rollback();
+            return redirect()->back()->with('error-message','There are some error when occur');
+        }
         
         return $this->getView();
     }
     
     protected function editOrderDetailSubmit(Request $req,$order_id){
+        $validateData = $req->validate([
+            'customer_name' => 'required|min:6|max:50',
+            'username' => 'nullable',
+            'address_1' => 'required',
+            'phone_number' => 'required|min:10|max:12',
+            'email' =>'required|email:rfc,dns,filter'
+        ]);
+        
         DB::beginTransaction();
         try {
             DB::table('orders_detail')
@@ -78,16 +97,23 @@ class AdminOrderController extends Controller
             DB::rollback();
             throw $e;
         }
-        return redirect()->route('detail-order', ['order_id' =>$order_id,'popup'=>0]);
+
+        return redirect()->route('detail-order', ['order_id' =>$order_id,'popup'=>0])->with('success-message','Edit detail order successfully!');
     }
+    
     protected function deleteOrderItem($order_id,$order_item_id){
-        DB::table('orders_item')
+        try{
+            DB::table('orders_item')
             ->where([
                 ['ID_PRODUCT','=',$order_item_id],
                 ['ID_ORDER','=',$order_id]])
             ->delete();
-        $popup = 1; //to open popup
-        return redirect()->route('detail-order', ['order_id' =>$order_id,'popup'=>$popup]);
+            $popup = 1; //to open popup
+            return redirect()->route('detail-order', ['order_id' =>$order_id,'popup'=>$popup])->with('success-messsage','Delete order item successfully!');
+        } catch(Exception $e){
+            DB::rollback();
+            return redirect()->back()->with('error-messsage','There are some error when occur');
+        }
     }
     protected function updateOrderItem($order_id,$listItemsId,$listQuanlity){
         $listItemsId = explode(',',$listItemsId);
@@ -107,6 +133,13 @@ class AdminOrderController extends Controller
         return view('add-order',['categories'=>$categories]);
     }
     protected function insertOrder(Request $req){
+        $validateData = $req->validate([
+            'customer_name' => 'required|min:6|max:50',
+            'username' => 'nullable',
+            'address_1' => 'required',
+            'phone' => 'required|min:10|max:12',
+            'email' =>'email:rfc,dns,filter'
+        ]);
         DB::beginTransaction();
         try{
             $order_id =  CommonController::getNextId('orders');

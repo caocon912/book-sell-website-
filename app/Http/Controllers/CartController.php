@@ -242,7 +242,7 @@ class CartController extends Controller
 
             $req->session()->put('shopping-cart',$cart_info);
         }
-        return redirect('view-cart-detail');
+        return redirect()->route('shop')->with('success-message','Add item to cart successfully!');
     }
     //delete item
     protected function deleteItem(Request $req,$product_id){

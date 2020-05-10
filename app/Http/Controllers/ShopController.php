@@ -7,17 +7,24 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Model\ProductObject;
+
+use Illuminate\Pagination\LengthAwarePaginator;
+
 class ShopController extends Controller
 {
     
     //get all the product 
     protected function getAllProduct(){
+        $categories = DB::table('category')
+                        ->select('ID','NAME','DESCRIPTION','STATUS')
+                        ->where('STATUS','=','1')
+                        ->get();
         $products = DB::table('product')
                         ->join('category','category.ID','=','product.CATEGORY_ID')
                         ->select('product.*','category.NAME as CATEGORY_NAME')
                         ->where('product.STATUS','=','1')
-                        ->get();
-        return view('shop',['products'=>$products]);
+                        ->paginate(2);
+        return view('shop',['products'=>$products,'categories'=>$categories]);
     }
     //get all the product 
     protected function addFavoriteItemList(Request $req, $product_id,$product_name,$product_price){

@@ -14,6 +14,24 @@
         </div>
     </div>
     <!-- Breadcrumb Section Begin -->
+    @if(Session::has('success-message'))
+        <div class="alert alert-success"> 
+            <button type="button" 
+                class="close" 
+                data-dismiss="alert" 
+                aria-hidden="true">&times;</button>
+            {{ session()->get('success-message') }} 
+        </div>
+    @endif
+    @if(Session::has('error-message'))
+        <div class="alert alert-danger"> 
+            <button type="button" 
+                class="close" 
+                data-dismiss="alert" 
+                aria-hidden="true">&times;</button>
+            {{ session()->get('error-message') }} 
+        </div>
+    @endif
 
     <!-- Product Shop Section Begin -->
     <section class="product-shop spad">
@@ -23,23 +41,16 @@
                     <div class="filter-widget">
                         <h4 class="fw-title">Categories</h4>
                         <ul class="filter-catagories">
-                            <li><a href="#">Men</a></li>
-                            <li><a href="#">Women</a></li>
-                            <li><a href="#">Kids</a></li>
+                            @if($categories != null && !empty($categories))
+                                @foreach($categories as $category)
+                                    <li><a href="#">{{$category->NAME}}</a></li>
+                                @endforeach
+                            @else
+                            <li><a href="#">No category to show</a></li>
+                            @endif
                         </ul>
                     </div>
-                    <div class="filter-widget">
-                        <h4 class="fw-title">Brand</h4>
-                        <div class="fw-brand-check">
-                            <div class="bc-item">
-                                <label for="bc-calvin">
-                                    Calvin Klein
-                                    <input type="checkbox" id="bc-calvin">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
+                    
                     <div class="filter-widget">
                         <h4 class="fw-title">Price</h4>
                         <div class="filter-range-wrap">
@@ -125,18 +136,18 @@
                     <div class="product-show-option">
                         <div class="row">
                             <div class="col-lg-7 col-md-7">
-                                <div class="select-option">
+                                {{-- <div class="select-option">
                                     <select class="sorting">
                                         <option value="">Default Sorting</option>
                                     </select>
                                     <select class="p-show">
                                         <option value="">Show:</option>
                                     </select>
-                                </div>
+                                </div> --}}
                             </div>
-                            <div class="col-lg-5 col-md-5 text-right">
+                            {{-- <div class="col-lg-5 col-md-5 text-right">
                                 <p>Show 01- 09 Of 36 Product</p>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     <div class="product-list">
@@ -158,7 +169,7 @@
                                     </div>
                                     <div class="pi-text">
                                         <div class="catagory-name">{{$product->CATEGORY_NAME}}</div>
-                                        <a href="#">
+                                    <a href="{{route('product-detail',['product_id'=>$product->ID])}}">
                                             <h5 id="product-name">{{$product->NAME}}</h5>
                                         </a>
                                         <div class="product-price">
@@ -171,10 +182,7 @@
                         </div>
                     </div>
                     <div class="loading-more">
-                        <i class="icon_loading"></i>
-                        <a href="#">
-                            Loading More
-                        </a>
+                            {{ $products->links() }}
                     </div>
                 </div>
             </div>
@@ -183,31 +191,8 @@
     <!-- Product Shop Section End -->
 
     <!-- Partner Logo Section Begin -->
-    <div class="partner-logo">
-        <div class="container">
-            <div class="logo-carousel owl-carousel">
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="{{asset('app-assets/img/logo-carousel/logo-1.png')}}" alt="">
-                    </div>
-                </div>
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="{{asset('app-assets/img/logo-carousel/logo-2.png')}}" alt="">
-                    </div>
-                </div>
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="{{asset('app-assets/img/logo-carousel/logo-3.png')}}" alt="">
-                    </div>
-                </div>
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="{{asset('app-assets/img/logo-carousel/logo-4.png')}}" alt="">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- Partner Logo Section End -->
+<script>
+    $('div.alert').delay(5000).slideUp(300);
+</script>
 @endsection

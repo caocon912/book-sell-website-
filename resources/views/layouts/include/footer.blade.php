@@ -77,11 +77,11 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <script src="{{asset('app-assets/js/jquery-3.3.1.min.js')}}"></script>
     <script src="{{asset('app-assets/js/bootstrap.min.js')}}"></script>
     <script src="{{asset('app-assets/js/jquery-ui.min.js')}}"></script>
-    <script src="{{asset('app-assets/js/jquery.countdown.min.js')}}"></script>
-    <script src="{{asset('app-assets/js/jquery.nice-select.min.js')}}"></script>
+    {{-- <script src="{{asset('app-assets/js/jquery.countdown.min.js')}}"></script>
+    <script src="{{asset('app-assets/js/jquery.nice-select.min.js')}}"></script> --}}
     <script src="{{asset('app-assets/js/jquery.zoom.min.js')}}"></script>
-    <script src="{{asset('app-assets/js/jquery.dd.min.js')}}"></script>
-    <script src="{{asset('app-assets/js/jquery.slicknav.js')}}"></script>
+    {{-- <script src="{{asset('app-assets/js/jquery.dd.min.js')}}"></script>
+    <script src="{{asset('app-assets/js/jquery.slicknav.js')}}"></script> --}}
     <script src="{{asset('app-assets/js/owl.carousel.min.js')}}"></script>
     <script src="{{asset('app-assets/js/main.js')}}"></script>
     <script src="{{asset('app-assets/js/032020.js')}}"></script>
@@ -90,5 +90,4 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
-
 </html>

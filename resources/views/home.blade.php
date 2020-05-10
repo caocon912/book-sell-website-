@@ -301,16 +301,6 @@
     <!-- Latest Blog Section End -->
 
     <!-- Partner Logo Section Begin -->
-    <div class="partner-logo">
-        <div class="container">
-            <div class="logo-carousel owl-carousel">
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="{{asset('app-assets/img/logo-carousel/logo-1.png')}}" alt="">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    
     <!-- Partner Logo Section End -->
 @endsection

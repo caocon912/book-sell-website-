@@ -11,7 +11,7 @@ class AdminCategoryController extends Controller
     //get all category
     protected function getAllCategory(){
         $categories = DB::table('category')
-                        ->get();
+                        ->paginate(5);
         return view('admin-category',['categories'=>$categories]);
     }
 
@@ -22,7 +22,7 @@ class AdminCategoryController extends Controller
 
     //insert category
     protected function insertCategory(Request $req){
-        $req->validate([
+        $validateData = $req->validate([
             'name'=>'required|max:255',
             'status'=>'required'
         ]);
@@ -33,6 +33,7 @@ class AdminCategoryController extends Controller
                         'DESCRIPTION'=>$req->input('comment'),
                         'STATUS'=>$req->input('status')
                     ]);
+
         return redirect('admin-category');
     }
 
@@ -47,6 +48,11 @@ class AdminCategoryController extends Controller
     
     //update edit category
     protected function updateCategory($category_id,Request $req){
+        $validateData = $req->validate([
+            'name'=>'required|max:255',
+            'description'=>'nullable|max:255',
+            'status'=>'required'
+        ]);
         DB::table('category')
             ->where('ID','=',$category_id)
             ->update([

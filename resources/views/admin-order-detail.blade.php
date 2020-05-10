@@ -8,6 +8,24 @@
       <section class="wrapper">
         <h3><i class="fa fa-angle-right"></i> Chi tiết đơn hàng</h3>
         <!-- row -->
+        @if(Session::has('success-message'))
+          <div class="alert alert-success"> 
+              <button type="button" 
+                  class="close" 
+                  data-dismiss="alert" 
+                  aria-hidden="true">&times;</button>
+              {{ session()->get('success-message') }} 
+          </div>
+        @endif
+        @if(Session::has('error-message'))
+          <div class="alert alert-danger"> 
+              <button type="button" 
+                  class="close" 
+                  data-dismiss="alert" 
+                  aria-hidden="true">&times;</button>
+              {{ session()->get('error-message') }} 
+          </div>
+        @endif
         <div class="row mt">
           <div class="col-md-12">
             <div class="content-panel">
@@ -30,7 +48,8 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td><input id="order_id" value="{{$order_detail->ID_ORDER}}" readonly style="width:50px"></td>
+                    {{-- <td><input id="order_id" value="{{$order_detail->ID_ORDER}}" readonly style="width:50px"></td> --}}
+                    <td>{{$order_detail->ID_ORDER}}</td>
                     <td>{{$order_detail->CUSTOMER_NAME}}</td>
                     <td>{{$order_detail->USERNAME}}</td>
                     <td>{{$order_detail->ADDRESS_1}}</td>
@@ -73,6 +92,15 @@
             </button>
           </div>
           <div class="modal-body">
+                    @if ($errors->any())
+                      <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                      </div>
+                    @endif
                     <div class="form-group ">
                       <label for="customer_name" class="control-label col-lg-2">Tên khách hàng</label>
                       <div class="col-lg-10">
@@ -117,7 +145,15 @@
 
                     <div class="form-group ">
                       <button class="primary-btn up-cart" onclick="getListItemId('update-order-item');" type="button">Update cart</button>
-                      <button class="primary-btn up-cart" type="button">Add product</button>
+                      <select id="categories" name="categories" onchange="loadProductByCategoryId();">
+                        @foreach($categories as $category)
+                            <option value="{{$category->ID}}">{{$category->NAME}}</option>
+                        @endforeach
+                      </select>
+                      <select name="product" id="product">
+                        {{-- load ajax by category id here --}}
+                      </select> 
+                      <button type="button" name="add_product_btn" id="add_product_btn" onclick="addProductIntoOrder();">Thêm</button>  
                       <div class="col-md-12">
                             <table class="cart-table" id="cart-table"> 
                               <thead>

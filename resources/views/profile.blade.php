@@ -14,7 +14,16 @@
         </div>
     </div>
     <!-- Breadcrumb Form Section Begin -->
-
+    @if (Session::has('error-message'))
+        <div class="alert alert-danger"> 
+            {{ session()->get('error-message') }} 
+        </div>
+    @endif
+    @if (Session::has('success-message'))
+        <div class="alert alert-success"> 
+            {{ session()->get('success-message') }} 
+        </div>
+    @endif
     <!-- Register Section Begin -->
     <div class="register-login-section spad">
         <div class="container">
@@ -25,7 +34,7 @@
                         <form action="{{route('update-user',['username'=>Auth::user()->USERNAME])}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="pi-pic">
-                                <img src="{{asset('app-assets/img/products/doremon-shirt.jpg')}}" alt="avatar">
+                                <img src="{{asset('uploads/'.$user_info->AVATAR)}}" alt="avatar">
                                 <input type="file" id="avatar_file" name="avatar" autofocus>
                             </div>
                             
@@ -79,36 +88,5 @@
     <!-- Register Form Section End -->
 
     <!-- Partner Logo Section Begin -->
-    <div class="partner-logo">
-        <div class="container">
-            <div class="logo-carousel owl-carousel">
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="{{asset('app-assets/img/logo-carousel/logo-1.png')}}" alt="">
-                    </div>
-                </div>
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="{{asset('app-assets/img/logo-carousel/logo-2.png')}}" alt="">
-                    </div>
-                </div>
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="{{asset('app-assets/img/logo-carousel/logo-3.png')}}" alt="">
-                    </div>
-                </div>
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="{{asset('app-assets/img/logo-carousel/logo-4.png')}}" alt="">
-                    </div>
-                </div>
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="{{asset('app-assets/img/logo-carousel/logo-5.png')}}" alt="">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- Partner Logo Section End -->
 @endsection

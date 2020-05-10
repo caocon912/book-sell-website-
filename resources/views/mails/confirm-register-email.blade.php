@@ -7,10 +7,6 @@ You have register in a clothes shopping- Fad. If it is you, please click under l
 
 If it's not you, you dont need do anything.
 
-@component('mail::button', ['url' => ''])
-Continue shopping
-@endcomponent
-
 Thanks,<br>
 Fad shop. 
 {{ config('app.name') }}

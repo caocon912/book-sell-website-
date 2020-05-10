@@ -41,8 +41,8 @@
                     <td>{{$category->STATUS}}</td>
                     <td>
                       {{-- <button class="btn btn-success btn-xs"><i class="fa fa-check"></i></button> --}}
-                      <button class="btn btn-primary btn-xs" data-id = '{{$category->ID}}' data-toggle="modal" data-target="#editModal" id="edit_category" class='edit_product'><i class="fa fa-pencil"></i></a></button>
-                      <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal" id="delete_product" class='delete_category'><i class="fa fa-trash-o "></i></button>
+                    <button class="btn btn-primary btn-xs" data-id = '{{$category->ID}}' data-name='{{$category->NAME}}' data-description='{{$category->DESCRIPTION}}' data-status='{{$category->STATUS}}' data-toggle="modal" data-target="#editModal" id="edit_category" class='edit_product'><i class="fa fa-pencil"></i></button></a>
+                    <button class="btn btn-danger btn-xs" data-id = '{{$category->ID}}' data-toggle="modal" data-target="#deleteModal" id="delete_product" class='delete_category'><i class="fa fa-trash-o "></i></button>
                     </td>
                   </tr>
                   @endforeach
@@ -55,13 +55,13 @@
         </div>
         <!-- /row -->
         <!-- Add Modal -->
-        <form class="form-horizontal style-form" method="post" action={{route('add-category-submit')}} enctype="multipart/form-data">
+        <form class="form-horizontal style-form" method="post" action="{{route('add-category-submit')}}" enctype="multipart/form-data">
           @csrf
           <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Thêm danh mục</h5>
+              <div class="modal-header">
+                  <h4 class="modal-title">Thêm danh mục</h4>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -108,7 +108,7 @@
           </div>
         </form>
         <!-- Edit Modal -->
-        <form class="form-horizontal style-form" method="get" action='{{route('edit-category-submit',['category_id'=>$category->ID])}}'>
+        <form class="form-horizontal style-form" method="get" action='#' id="edit_cate_form">
           <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exitModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
@@ -119,7 +119,36 @@
                   </button>
                 </div>
                 <div class="modal-body" id="editModalBody">
-                  
+                  <div class="form-group">
+                    <label class="col-sm-2 col-sm-2 control-label">Tên </label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="name" id="edit_name" value="">
+                    </div>
+                    @error ('name')
+                      <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                  </div>
+                
+                  <div class="form-group ">
+                      <label for="ccomment" class="control-label col-lg-2">Mô tả</label>
+                      <div class="col-lg-10">
+                        <textarea class="form-control " name="comment" id="edit_description" ></textarea>
+                      </div>
+                      @error ('comment')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                      @enderror
+                  </div>
+
+                  <div class="form-group ">
+                      <label for="ccomment" class="control-label col-lg-2">Status</label>
+                      <div class="col-lg-10">
+                        <input name="status" type="radio" value="1" id="edit_active">Active
+                        <input name="status" type="radio" value="0" id="edit_deactive">Deactive
+                      </div>
+                      @error ('status')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                      @enderror
+                  </div> 
                 </div> <!-- modal-body-->
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
@@ -144,36 +173,43 @@
                 </div> <!-- modal-body-->
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                <a href="{{route('delete-category',['category_id'=>$category->ID])}}"><button type="button" class="btn btn-primary">Xóa</button></a>
+                <a href="#" id="delete_cate_href"><button type="button" class="btn btn-primary">Xóa</button></a>
                 </div> <!-- modal-footer-->
               </div> <!-- modal-content -->
             </div> <!-- modal-dialog -->
           </div>
       </section>
+      {{$categories->links()}}
     </section>
     <!-- /MAIN CONTENT -->
     <!--main content end-->
 <script>
-    $(document).ready(function(){
-
-      $('.edit_product').click(function(){
-        
-        var category_id = $(this).data('id');
-     
-        // AJAX request
-        $.ajax({
-         url: 'ajax/get-category/c_id='+category_id,
-         type: 'get',
-         data: {category_id: category_id},
-         success: function(response){ 
-           // Add response in Modal body
-           $('.modal-body').html(response);
-     
-           // Display Modal
-           $('#editModal').modal('show'); 
-         }
-       });
-      });
-     });
+    $('#deleteModal').on('show.bs.modal',function(event){
+      var button = $(event.relatedTarget) 
+      var id = button.data('id')
+      var modal = $(this)
+      var url = '{{ route("delete-category", [":category_id"]) }}';
+      url = url.replace(':category_id', id);
+      modal.find('.modal-footer #delete_cate_href').attr("href", url);
+    })
+    $('#editModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) 
+      var id = button.data('id')
+      var name = button.data('name') 
+      var description = button.data('description') 
+      var status = button.data('status') 
+      var modal = $(this)
+      modal.find('.modal-body #edit_name').val(name);
+      modal.find('.modal-body #edit_description').val(description);
+      if (status=="1"){
+        modal.find('.modal-body #edit_active').prop("checked", true);
+      } else if (status=="0"){
+        modal.find('.modal-body #edit_deactive').prop("checked", true);
+      }
+      var url = "{{route('edit-category-submit',[':category_id'])}}";
+      url = url.replace(':category_id',id);
+      $('#edit_cate_form').attr('action', url);
+    })
+  
 </script>
 @endsection

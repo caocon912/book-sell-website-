@@ -14,7 +14,7 @@
               <table class="table table-striped table-advance table-hover">
                 <thead>
                   <tr>
-                    <td><h4><i class="fa fa-angle-right"></i>Danh mục sản phẩm</h4></td>
+                    <td colspan="3"><h4><i class="fa fa-angle-right"></i>Danh mục sản phẩm</h4></td>
                     <!-- Button trigger modal -->
                     <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="add_product">
                       Thêm
@@ -51,7 +51,7 @@
                     <td>
                       {{-- <button class="btn btn-success btn-xs" type="button"><i class="fa fa-check"></i></button> --}}
                       <a href="{{route('edit-product',['product_id'=>$product->ID])}}"><button class="btn btn-primary btn-xs" type="button"><i class="fa fa-pencil"></i></button></a>
-                      <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal" id="delete_product" class='delete_product'><i class="fa fa-trash-o "></i></button>
+                    <button class="btn btn-danger btn-xs" data-id="{{$product->ID}}" data-toggle="modal" data-target="#deleteModal" id="delete_product" class='delete_product'><i class="fa fa-trash-o "></i></button>
                     </td>
                   </tr>
                   @endforeach
@@ -62,6 +62,7 @@
           </div>
           <!-- /col-md-12 -->
         </div>
+        {{$products->links()}}
         <!-- /row -->
         <!-- Modal -->
         <form class="form-horizontal style-form" method="post" action={{route('add-product-submit')}} enctype="multipart/form-data">
@@ -153,16 +154,26 @@
               </div> <!-- modal-body-->
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                <a href="{{route('delete-product',['product_id'=>$product->ID])}}"><button type="button" class="btn btn-primary">Xóa</button></a>
+                <a href="#" id="delete_product_href"><button type="button" class="btn btn-primary">Xóa</button></a>
               </div> <!-- modal-footer-->
             </div> <!-- modal-content -->
           </div> <!-- modal-dialog -->
         </div>
       </section>
+
     </section>
     <!-- /MAIN CONTENT -->
     <!--main content end-->
     <script>
+      $('#deleteModal').on('show.bs.modal',function(event){
+        var button = $(event.relatedTarget) 
+        var id = button.data('id')
+        var modal = $(this)
+        var url = '{{ route("delete-product", [":product_id"]) }}';
+        url = url.replace(':product_id', id);
+        modal.find('.modal-footer #delete_product_href').attr("href", url);
+      })
+
       $('#myModal').on('shown.bs.modal', function () {
           $('#myInput').trigger('focus')
       })

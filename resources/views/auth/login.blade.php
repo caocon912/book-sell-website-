@@ -14,7 +14,11 @@
         </div>
     </div>
     <!-- Breadcrumb Form Section Begin -->
-
+    @if(Session::has('error-message'))
+        <div class="alert alert-danger"> 
+            {{ session()->get('error-message') }} 
+        </div>
+    @endif
     <!-- Register Section Begin -->
     <div class="register-login-section spad">
         <div class="container">
@@ -27,11 +31,18 @@
                             <div class="group-input">
                                 <label for="username">Username or email address *</label>
                                 <input type="text" id="username" name="username" autofocus>
+                                @error ('username')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="group-input">
                                 <label for="pass">Password *</label>
                                 <input type="password" id="pass" name="pwd" autofocus>
+                                @error ('pwd')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                             </div>
+                            
                             <div class="group-input gi-check">
                                 <div class="gi-more">
                                     <label for="save-pass">
@@ -55,36 +66,5 @@
     <!-- Register Form Section End -->
 
     <!-- Partner Logo Section Begin -->
-    <div class="partner-logo">
-        <div class="container">
-            <div class="logo-carousel owl-carousel">
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="{{asset('app-assets/img/logo-carousel/logo-1.png')}}" alt="">
-                    </div>
-                </div>
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="{{asset('app-assets/img/logo-carousel/logo-2.png')}}" alt="">
-                    </div>
-                </div>
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="{{asset('app-assets/img/logo-carousel/logo-3.png')}}" alt="">
-                    </div>
-                </div>
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="{{asset('app-assets/img/logo-carousel/logo-4.png')}}" alt="">
-                    </div>
-                </div>
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="{{asset('app-assets/img/logo-carousel/logo-5.png')}}" alt="">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- Partner Logo Section End -->
 @endsection

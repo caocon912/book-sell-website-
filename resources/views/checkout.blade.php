@@ -9,7 +9,6 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-text product-more">
-                        <a href="{{route('home')}}"><i class="fa fa-home"></i> Home</a>
                         <a href="{{route('shop')}}">Shop</a>
                         <span>Check Out</span>
                     </div>
@@ -18,7 +17,33 @@
         </div>
     </div>
     <!-- Breadcrumb Section Begin -->
-
+    @if(Session::has('success-message'))
+        <div class="alert alert-success">
+            <button type="button" 
+                class="close" 
+                data-dismiss="alert" 
+                aria-hidden="true">&times;</button>
+            {{ session()->get('success-message') }}
+        </div>
+    @endif
+    @if(Session::has('error-message'))
+        <div class="alert alert-danger">
+            <button type="button" 
+                class="close" 
+                data-dismiss="alert" 
+                aria-hidden="true">&times;</button>
+            {{ session()->get('error-message') }}
+        </div>
+    @endif
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
     <!-- Shopping Cart Section Begin -->
     <section class="checkout-section spad">
         <div class="container">
@@ -77,18 +102,18 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="checkout-content">
+                        {{-- <div class="checkout-content">
                             <input type="text" placeholder="Enter Your Coupon Code" name="coupon-code">
-                        </div>
+                        </div> --}}
                         <div class="place-order">
                             <h4>Your Order</h4>
                             <div class="order-total">
                                 <ul class="order-table">
                                     <li>Product <span>Total</span></li>
-                                    @if ($cart_items != null&&count($cart_items)!=0) 
-                                    @foreach($cart_items as $item)
-                                        <li class="fw-normal">{{$item->NAME}} x {{$item->QUANLITY}} <span>{{$item->QUANLITY * $item->NEW_PRICE}}</span></li>
-                                    @endforeach
+                                    @if ($cart_items != null&&$cart_items->count()!=0) 
+                                        @foreach($cart_items as $item)
+                                            <li class="fw-normal">{{$item->NAME}} x {{$item->QUANLITY}} <span>{{$item->QUANLITY * $item->NEW_PRICE}}</span></li>
+                                        @endforeach
                                     @else
                                         <li class="fw-normal"><b>You dont have any item</b></li> 
                                     @endif
@@ -128,37 +153,6 @@
     <!-- Shopping Cart Section End -->
 
     <!-- Partner Logo Section Begin -->
-    <div class="partner-logo">
-        <div class="container">
-            <div class="logo-carousel owl-carousel">
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="img/logo-carousel/logo-1.png" alt="">
-                    </div>
-                </div>
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="img/logo-carousel/logo-2.png" alt="">
-                    </div>
-                </div>
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="img/logo-carousel/logo-3.png" alt="">
-                    </div>
-                </div>
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="img/logo-carousel/logo-4.png" alt="">
-                    </div>
-                </div>
-                <div class="logo-item">
-                    <div class="tablecell-inner">
-                        <img src="img/logo-carousel/logo-5.png" alt="">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- Partner Logo Section End -->
 <script>
     var total_price = document.getElementById("total_price").value;

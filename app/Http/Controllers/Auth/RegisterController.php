@@ -13,7 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Mail\ConfirmRegisterMail;
 use Illuminate\Support\Facades\Mail;
-
+use App\Http\Requests\UserInfoRequest;
+date_default_timezone_set('Asia/Saigon'); 
 class RegisterController extends Controller
 {
     /*
@@ -26,7 +27,7 @@ class RegisterController extends Controller
     | provide this functionality without requiring any additional code.
     |
     */
-
+   
     use RegistersUsers;
 
     
@@ -66,9 +67,10 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.s
      */
-    protected function create(Request $req)
+    protected function create(UserInfoRequest $req)
     {
-        
+        $validated = $req->validated();
+
         $users = DB::table('user')->where('USERNAME','=',$req->input('username'),'or','EMAIL','=',$req->input('email'))->get();
         $userCount = $users->count();
         if ($userCount==0){
@@ -76,25 +78,16 @@ class RegisterController extends Controller
                         'USERNAME'=>$req->input('username'),
                         'EMAIL'=>$req->input('email'),
                         'PASSWORD'=>Hash::make($req->input('pwd')),
-                        'STATUS'=>'0',
+                        'STATUS'=>'1',//set status=0 if chua kich hoat tai khoan qua gmail
                         'COUNT_LOGIN'=>'1',
                         'CREATE_AT'=>date('Y/m/d H:i:s')
             ]);
-            $req->session()->put([
-                'username'=>$req->input('username'),
-                'level'=>'2'
-            ]);
+            
             // send mail authentication
             Mail::to($req->input('email'))->send(new ConfirmRegisterMail());
-            return redirect('shop');
+            return redirect()->route('shop')->with('success-message','Registerd successfully!');
         } else {
-            echo "<script>
-                    var dicision = window.confirm('username or email is exists');
-                    if (dicision == true){
-                        window.history.back();
-                    }
-                  </script>";
-            //return redirect()->back();
+            return redirect()->back()->with('success-message','Registerd successfully!');
         }
     }
 
